@@ -26,6 +26,9 @@ type Attribute struct {
 
 	// An arbitrary payload which is specified by Type.
 	Data []byte
+
+	// zeroCopy flag specifies if packet data is copied
+	zeroCopy *bool
 }
 
 // marshal marshals the contents of a into b and returns the number of bytes
@@ -64,6 +67,10 @@ func (a *Attribute) unmarshal(b []byte) error {
 		return errInvalidAttribute
 	// Data present
 	case int(a.Length) >= nlaHeaderLen:
+		if *a.zeroCopy {
+			a.Data = b[nlaHeaderLen:a.Length]
+			break
+		}
 		a.Data = make([]byte, len(b[nlaHeaderLen:a.Length]))
 		copy(a.Data, b[nlaHeaderLen:a.Length])
 	}
@@ -150,6 +157,9 @@ type AttributeDecoder struct {
 	// If not set, the native byte order will be used.
 	ByteOrder binary.ByteOrder
 
+	// ZeroCopy flag specifies if packet data is copied
+	ZeroCopy bool
+
 	// The current attribute being worked on.
 	a Attribute
 
@@ -172,6 +182,8 @@ func NewAttributeDecoder(b []byte) (*AttributeDecoder, error) {
 
 		b: b,
 	}
+
+	ad.a.zeroCopy = &ad.ZeroCopy
 
 	var err error
 	ad.length, err = ad.available()
@@ -271,6 +283,11 @@ func (ad *AttributeDecoder) Err() error { return ad.err }
 // Bytes returns the raw bytes of the current Attribute's data.
 func (ad *AttributeDecoder) Bytes() []byte {
 	src := ad.data()
+
+	if ad.ZeroCopy {
+		return src
+	}
+
 	dest := make([]byte, len(src))
 	copy(dest, src)
 	return dest

@@ -273,9 +273,10 @@ func TestUnmarshalAttributes(t *testing.T) {
 				0xff,
 			},
 			attrs: []Attribute{{
-				Length: 5,
-				Type:   1,
-				Data:   []byte{0xff},
+				Length:   5,
+				Type:     1,
+				Data:     []byte{0xff},
+				zeroCopy: new(bool),
 			}},
 		},
 		{
@@ -297,9 +298,10 @@ func TestUnmarshalAttributes(t *testing.T) {
 				0x01, 0x00,
 			},
 			attrs: []Attribute{{
-				Length: 4,
-				Type:   1,
-				Data:   make([]byte, 0),
+				Length:   4,
+				Type:     1,
+				Data:     make([]byte, 0),
+				zeroCopy: new(bool),
 			}},
 		},
 		{
@@ -310,9 +312,10 @@ func TestUnmarshalAttributes(t *testing.T) {
 				0xff, 0x00, 0x00, 0x00,
 			},
 			attrs: []Attribute{{
-				Length: 5,
-				Type:   1,
-				Data:   []byte{0xff},
+				Length:   5,
+				Type:     1,
+				Data:     []byte{0xff},
+				zeroCopy: new(bool),
 			}},
 		},
 		{
@@ -323,9 +326,10 @@ func TestUnmarshalAttributes(t *testing.T) {
 				0xaa, 0xbb, 0xcc, 0xdd,
 			},
 			attrs: []Attribute{{
-				Length: 8,
-				Type:   2,
-				Data:   []byte{0xaa, 0xbb, 0xcc, 0xdd},
+				Length:   8,
+				Type:     2,
+				Data:     []byte{0xaa, 0xbb, 0xcc, 0xdd},
+				zeroCopy: new(bool),
 			}},
 		},
 		{
@@ -351,19 +355,22 @@ func TestUnmarshalAttributes(t *testing.T) {
 			},
 			attrs: []Attribute{
 				{
-					Length: 5,
-					Type:   1,
-					Data:   []byte{0xff},
+					Length:   5,
+					Type:     1,
+					Data:     []byte{0xff},
+					zeroCopy: new(bool),
 				},
 				{
-					Length: 8,
-					Type:   2,
-					Data:   []byte{0xaa, 0xbb, 0xcc, 0xdd},
+					Length:   8,
+					Type:     2,
+					Data:     []byte{0xaa, 0xbb, 0xcc, 0xdd},
+					zeroCopy: new(bool),
 				},
 				{
-					Length: 4,
-					Type:   3,
-					Data:   make([]byte, 0),
+					Length:   4,
+					Type:     3,
+					Data:     make([]byte, 0),
+					zeroCopy: new(bool),
 				},
 				{
 					Length: 16,
@@ -373,6 +380,7 @@ func TestUnmarshalAttributes(t *testing.T) {
 						0x22, 0x22, 0x22, 0x22,
 						0x33, 0x33, 0x33, 0x33,
 					},
+					zeroCopy: new(bool),
 				},
 			},
 		},
@@ -384,9 +392,10 @@ func TestUnmarshalAttributes(t *testing.T) {
 			},
 			attrs: []Attribute{
 				{
-					Length: 4,
-					Type:   0xffff,
-					Data:   make([]byte, 0),
+					Length:   4,
+					Type:     0xffff,
+					Data:     make([]byte, 0),
+					zeroCopy: new(bool),
 				},
 			},
 		},
